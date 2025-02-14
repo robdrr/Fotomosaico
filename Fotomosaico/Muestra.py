@@ -4,11 +4,14 @@ import os
 from dtabase import conexion, cursor  # Importamos la conexión
 
 # Buscar todas las imágenes .jpg en la carpeta "imagenes/"
-rutas_imagenes = glob.glob("imagenes/*.jpg")
+rutas_imagenes = glob.glob("imagenes/Merari/*.jpg")
 
 # Recorrer cada imagen
 for ruta in rutas_imagenes:
-    nombre = os.path.basename(ruta).split('.')[0]
+    # nombre = os.path.basename(ruta).split('.')[0]
+    nombre_archivo = os.path.basename(ruta)
+    nombre_carpeta = os.path.basename(os.path.dirname(ruta))
+    nombre_completo = f"{nombre_carpeta}/{nombre_archivo}"
     imagen = Image.open(ruta).convert("RGB")
     ancho, alto = imagen.size  
 
@@ -34,7 +37,7 @@ for ruta in rutas_imagenes:
 
     # Insertar en la base de datos
     query = "INSERT INTO promedio_rgb (R, G, B, Name) VALUES (%s, %s, %s, %s);"
-    values = (rvalue, gvalue, bvalue, nombre)
+    values = (rvalue, gvalue, bvalue, nombre_completo)
 
     try:
         cursor.execute(query, values)
