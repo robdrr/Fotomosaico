@@ -30,7 +30,7 @@ for ruta in rutas_imagenes:
         gvalue /= pixelcount
         bvalue /= pixelcount
 
-    print(f"Imagen: {nombre} - Promedio RGB: ({rvalue}, {gvalue}, {bvalue})\n")
+    # print(f"Imagen: {nombre} - Promedio RGB: ({rvalue}, {gvalue}, {bvalue})\n")
 
     # Insertar en la base de datos
     query = "INSERT INTO promedio_rgb (R, G, B, Name) VALUES (%s, %s, %s, %s);"
@@ -43,6 +43,7 @@ for ruta in rutas_imagenes:
     except Exception as e:
         print(f"Error al insertar en la base de datos: {e}")
 
+print("Termino de ejecutar")
 # Cerrar conexión cuando termines
 cursor.close()
 conexion.close()
