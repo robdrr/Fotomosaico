@@ -1,31 +1,29 @@
 from PIL import Image
-import math
-
-from pprint import pprint
-from dtabase import conexion, cursor  
-
 from Euclidiana import *
-Photo = "imagenes/imagenBW.jpg"
+
+Photo = "imagenes/Generar/Prueba1.jpg"
 imagen = Image.open(Photo).convert("RGB")
 avg = []
 ancho, alto = imagen.size
-tamanhofoto = 100
+tamanhofoto = 20  # Tamaño de cada bloque
+
+# Recorrer la imagen en bloques de tamanhofoto × tamanhofoto
 for y in range(0, alto, tamanhofoto):
     quoe = []
     for x in range(0, ancho, tamanhofoto):
-        rvalue = 0
-        gvalue = 0
-        bvalue = 0
-        pixelcount = 0
+        rvalue = gvalue = bvalue = pixelcount = 0
+        
+        # Recorrer cada píxel dentro del bloque actual
         for i in range(tamanhofoto):
             for j in range(tamanhofoto):
-                if (x + j) < ancho and (y + i) < alto:
-                    r, g, b = imagen.getpixel((j+x, i+y))
+                if (x + j) < ancho and (y + i) < alto:  # Verifica que esté dentro de la imagen
+                    r, g, b = imagen.getpixel((x + j, y + i))
                     rvalue += r
                     gvalue += g
                     bvalue += b
-                    pixelcount +=1
-        if pixelcount > 0:
+                    pixelcount += 1
+        
+        if pixelcount > 0:  # Evitar división por cero
             rvalue /= pixelcount
             gvalue /= pixelcount
             bvalue /= pixelcount 
@@ -33,24 +31,38 @@ for y in range(0, alto, tamanhofoto):
         quoe.append((rvalue, gvalue, bvalue))
     avg.append(quoe)
 
-def redondear_arriba(numero):
-    if numero % 1 != 0:  # Si tiene parte decimal
-        return math.ceil(numero)  # Redondea hacia arriba
-    return int(numero)  # Si es un número entero, lo devuelve tal cual
+# Cargar imagen base para pegar los mosaicos
+img_base = Image.open(Photo)
 
+# Calcular número de bloques por fila y columna
+fila = (ancho + tamanhofoto - 1) // tamanhofoto  # Redondeo hacia arriba
+columna = (alto + tamanhofoto - 1) // tamanhofoto
 
-
-# for a in range()
-
-fila = redondear_arriba(ancho/tamanhofoto)
-columna = redondear_arriba(alto/tamanhofoto)
-name = ''
+# Reemplazar bloques con imágenes más cercanas
 for a in range(columna):
-    for b in range(fila):
-        rsearch, gsearch, bsearch = avg[a][b]
-        name, r, g, b, distancia =buscar_color_mas_cercano(rsearch, gsearch, bsearch)
-        img_base= Image.open(Photo)
-        img_insert = Image.open(f'imagenes/{name}.jpg')
+    for be in range(fila):
+        if a < len(avg) and be < len(avg[a]):  # Evitar errores de índice
+            rsearch, gsearch, bsearch = avg[a][be]
+            name, r, g, b, distancia = buscar_color_mas_cercano(rsearch, gsearch, bsearch)
+            
+            img_insert = Image.open(f'imagenes/{name}')
+            img_resized = img_insert.resize((tamanhofoto, tamanhofoto))
+            
+            # Corregir posición de pegado (x = be, y = a)
+            posicion = (int(be * tamanhofoto), int(a * tamanhofoto))
+            
+            # Pegar la imagen en la base
+            if img_insert.mode == "RGBA":
+                img_base.paste(img_resized, posicion, img_resized)
+            else:
+                img_base.paste(img_resized, posicion)
+
+img_base.save("resultado.jpg") 
+img_base.show()
+
+
+
+        
 
 
 
