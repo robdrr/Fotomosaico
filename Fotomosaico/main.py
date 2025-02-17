@@ -1,12 +1,12 @@
 from PIL import Image
 from Euclidiana import *
 
-Photo = "imagenes/Generar/Prueba1.jpg"
+Photo = "Generar/Prueba1.jpg"
 imagen = Image.open(Photo).convert("RGB")
 avg = []
 ancho, alto = imagen.size
-tamanhofoto = 20  # Tamaño de cada bloque
-
+tamanhofoto = 10  # Tamaño de cada bloque
+tabla = "paisajes_rgb"
 # Recorrer la imagen en bloques de tamanhofoto × tamanhofoto
 for y in range(0, alto, tamanhofoto):
     quoe = []
@@ -37,27 +37,25 @@ img_base = Image.open(Photo)
 # Calcular número de bloques por fila y columna
 fila = (ancho + tamanhofoto - 1) // tamanhofoto  # Redondeo hacia arriba
 columna = (alto + tamanhofoto - 1) // tamanhofoto
-
+print("paso 1")
 # Reemplazar bloques con imágenes más cercanas
 for a in range(columna):
     for be in range(fila):
         if a < len(avg) and be < len(avg[a]):  # Evitar errores de índice
             rsearch, gsearch, bsearch = avg[a][be]
-            name, r, g, b, distancia = buscar_color_mas_cercano(rsearch, gsearch, bsearch)
+            name, r, g, b, distancia = buscar_color_mas_cercano(rsearch, gsearch, bsearch, tabla)
             
             img_insert = Image.open(f'imagenes/{name}')
             img_resized = img_insert.resize((tamanhofoto, tamanhofoto))
             
-            # Corregir posición de pegado (x = be, y = a)
             posicion = (int(be * tamanhofoto), int(a * tamanhofoto))
             
-            # Pegar la imagen en la base
             if img_insert.mode == "RGBA":
                 img_base.paste(img_resized, posicion, img_resized)
             else:
                 img_base.paste(img_resized, posicion)
 
-img_base.save("resultado.jpg") 
+img_base.save("resultado12.jpg") 
 img_base.show()
 
 

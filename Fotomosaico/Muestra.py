@@ -7,10 +7,7 @@ from dtabase import conexion, cursor  # Importamos la conexión
 import glob
 
 # Buscar todas las imágenes .jpg en "imagenes/" y sus subcarpetas
-rutas_imagenes = glob.glob("videos/fotogramas/*.jpg", recursive=True)
-
-
-
+rutas_imagenes = glob.glob("imagenes/paisajes/*.jpg", recursive=True)
 
 # Recorrer cada imagen
 for ruta in rutas_imagenes:
@@ -39,16 +36,16 @@ for ruta in rutas_imagenes:
         gvalue /= pixelcount
         bvalue /= pixelcount
 
-    # print(f"Imagen: {nombre} - Promedio RGB: ({rvalue}, {gvalue}, {bvalue})\n")
+    # print(f"Imagen: {nombre_completo} - Promedio RGB: ({rvalue}, {gvalue}, {bvalue})\n")
 
     # Insertar en la base de datos
-    query = "INSERT INTO avg_rgb (R, G, B, Name) VALUES (%s, %s, %s, %s);"
+    query = "INSERT INTO paisajes_rgb (R, G, B, Name) VALUES (%s, %s, %s, %s);"
     values = (rvalue, gvalue, bvalue, nombre_completo)
 
     try:
         cursor.execute(query, values)
         conexion.commit()  # Confirmar cambios
-        print("Registro insertado con éxito")
+        # print("Registro insertado con éxito")
     except Exception as e:
         print(f"Error al insertar en la base de datos: {e}")
 

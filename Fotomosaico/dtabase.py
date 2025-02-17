@@ -12,7 +12,7 @@ cursor = conexion.cursor()
 
 # Crear la tabla si no existe
 cursor.execute("""
-    CREATE TABLE IF NOT EXISTS avg_rgb (
+    CREATE TABLE IF NOT EXISTS paisajes_RGB (
         id INT AUTO_INCREMENT PRIMARY KEY,
         R FLOAT NOT NULL,
         G FLOAT NOT NULL,
