@@ -55,14 +55,8 @@ for a in range(columna):
             else:
                 img_base.paste(img_resized, posicion)
 
-img_base.save("resultado12.jpg") 
+img_base.save("resultado13.jpg") 
 img_base.show()
-
-
-
-        
-
-
 
 
 
