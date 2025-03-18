@@ -4,7 +4,7 @@ import mysql.connector
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Ford2007.",
+    password=".",
     database="RGB_FOTOS"  # Asegurar que usamos la base de datos correcta
 )
 
